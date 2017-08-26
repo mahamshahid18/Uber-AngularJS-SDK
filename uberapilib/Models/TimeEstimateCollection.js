@@ -13,41 +13,59 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('TimeEstimateCollection', ['BaseModel', 'TimeEstimate',
-        function (BaseModel, TimeEstimate) {
-            var TimeEstimateCollection = function (obj) {
-                if (!obj) {
-                    this.times = null;
-                } else {
-                    this.times = obj.times.map(function (model) {
-                        return new TimeEstimate(model);
-                    });
-                }
+    .factory('TimeEstimateCollection', ['BaseModel', TimeEstimateCollectionModel]);
+
+    function TimeEstimateCollectionModel(BaseModel) {
+        var TimeEstimateCollection = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.times = this.getValue(obj.times);
+        };
+
+        TimeEstimateCollection.prototype = new BaseModel();
+        TimeEstimateCollection.prototype.constructor = TimeEstimateCollection;
     
-            TimeEstimateCollection.prototype = new BaseModel();
-            TimeEstimateCollection.prototype.constructor = TimeEstimateCollection;
-        
-            /**
-             * List of time estimates
-             *
-             * @return {array}
-             */
-            TimeEstimateCollection.prototype.getTimes = function () {
-                return this.times;
-            };
-        
-            /**
-             * Setter for Times
-             * 
-             * @param {array} value 
-             */
-            TimeEstimateCollection.prototype.setTimes = function (value) {
-                this.times = value;
-            };
-        
-            return TimeEstimateCollection;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        TimeEstimateCollection.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'times', realName: 'times', array: true, type: 'TimeEstimate' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        TimeEstimateCollection.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * List of time estimates
+         *
+         * @return {array}
+         */
+        TimeEstimateCollection.prototype.getTimes = function () {
+            return this.times;
+        };
+    
+        /**
+         * Setter for Times
+         * 
+         * @param {array} value 
+         */
+        TimeEstimateCollection.prototype.setTimes = function (value) {
+            this.times = value;
+        };
+    
+        return TimeEstimateCollection;
+    }
 
 }(angular));

@@ -13,127 +13,140 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('Product', ['BaseModel',
-        function (BaseModel) {
-            var Product = function (obj) {
-                if (!obj) {
-                    this.capacity = null;
-                    this.description = null;
-                    this.displayName = null;
-                    this.image = null;
-                    this.productId = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['displayName'] = 'display_name';
-                    this._variableDict['productId'] = 'product_id';
-                } else {
-                    this.capacity = obj.capacity;
-                    this.description = obj.description;
-                    this.displayName = obj.display_name;
-                    this.image = obj.image;
-                    this.productId = obj.product_id;
-            
-                    // Append to variable dictionary
-                    this._variableDict['displayName'] = 'display_name';
-                    this._variableDict['productId'] = 'product_id';
-                }
+    .factory('Product', ['BaseModel', ProductModel]);
+
+    function ProductModel(BaseModel) {
+        var Product = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.capacity = this.getValue(obj.capacity);
+            this.description = this.getValue(obj.description);
+            this.displayName = this.getValue(obj.displayName);
+            this.image = this.getValue(obj.image);
+            this.productId = this.getValue(obj.productId);
+        };
+
+        Product.prototype = new BaseModel();
+        Product.prototype.constructor = Product;
     
-            Product.prototype = new BaseModel();
-            Product.prototype.constructor = Product;
-        
-            /**
-             * Capacity of product. For example, 4 people.
-             *
-             * @return {int}
-             */
-            Product.prototype.getCapacity = function () {
-                return this.capacity;
-            };
-        
-            /**
-             * Setter for Capacity
-             * 
-             * @param {int} value 
-             */
-            Product.prototype.setCapacity = function (value) {
-                this.capacity = value;
-            };
-        
-            /**
-             * Description of product.
-             *
-             * @return {string}
-             */
-            Product.prototype.getDescription = function () {
-                return this.description;
-            };
-        
-            /**
-             * Setter for Description
-             * 
-             * @param {string} value 
-             */
-            Product.prototype.setDescription = function (value) {
-                this.description = value;
-            };
-        
-            /**
-             * Display name of product.
-             *
-             * @return {string}
-             */
-            Product.prototype.getDisplayName = function () {
-                return this.displayName;
-            };
-        
-            /**
-             * Setter for DisplayName
-             * 
-             * @param {string} value 
-             */
-            Product.prototype.setDisplayName = function (value) {
-                this.displayName = value;
-            };
-        
-            /**
-             * Image URL representing the product.
-             *
-             * @return {string}
-             */
-            Product.prototype.getImage = function () {
-                return this.image;
-            };
-        
-            /**
-             * Setter for Image
-             * 
-             * @param {string} value 
-             */
-            Product.prototype.setImage = function (value) {
-                this.image = value;
-            };
-        
-            /**
-             * Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles.
-             *
-             * @return {string}
-             */
-            Product.prototype.getProductId = function () {
-                return this.productId;
-            };
-        
-            /**
-             * Setter for ProductId
-             * 
-             * @param {string} value 
-             */
-            Product.prototype.setProductId = function (value) {
-                this.productId = value;
-            };
-        
-            return Product;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        Product.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'capacity', realName: 'capacity' },
+                { name: 'description', realName: 'description' },
+                { name: 'displayName', realName: 'display_name' },
+                { name: 'image', realName: 'image' },
+                { name: 'productId', realName: 'product_id' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        Product.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * Capacity of product. For example, 4 people.
+         *
+         * @return {int}
+         */
+        Product.prototype.getCapacity = function () {
+            return this.capacity;
+        };
+    
+        /**
+         * Setter for Capacity
+         * 
+         * @param {int} value 
+         */
+        Product.prototype.setCapacity = function (value) {
+            this.capacity = value;
+        };
+    
+        /**
+         * Description of product.
+         *
+         * @return {string}
+         */
+        Product.prototype.getDescription = function () {
+            return this.description;
+        };
+    
+        /**
+         * Setter for Description
+         * 
+         * @param {string} value 
+         */
+        Product.prototype.setDescription = function (value) {
+            this.description = value;
+        };
+    
+        /**
+         * Display name of product.
+         *
+         * @return {string}
+         */
+        Product.prototype.getDisplayName = function () {
+            return this.displayName;
+        };
+    
+        /**
+         * Setter for DisplayName
+         * 
+         * @param {string} value 
+         */
+        Product.prototype.setDisplayName = function (value) {
+            this.displayName = value;
+        };
+    
+        /**
+         * Image URL representing the product.
+         *
+         * @return {string}
+         */
+        Product.prototype.getImage = function () {
+            return this.image;
+        };
+    
+        /**
+         * Setter for Image
+         * 
+         * @param {string} value 
+         */
+        Product.prototype.setImage = function (value) {
+            this.image = value;
+        };
+    
+        /**
+         * Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in
+         * San Francisco will have a different product_id than uberX in Los Angeles.
+         *
+         * @return {string}
+         */
+        Product.prototype.getProductId = function () {
+            return this.productId;
+        };
+    
+        /**
+         * Setter for ProductId
+         * 
+         * @param {string} value 
+         */
+        Product.prototype.setProductId = function (value) {
+            this.productId = value;
+        };
+    
+        return Product;
+    }
 
 }(angular));

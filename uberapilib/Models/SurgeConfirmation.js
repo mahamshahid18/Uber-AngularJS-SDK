@@ -13,65 +13,79 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('SurgeConfirmation', ['BaseModel',
-        function (BaseModel) {
-            var SurgeConfirmation = function (obj) {
-                if (!obj) {
-                    this.href = null;
-                    this.surgeConfirmationId = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['surgeConfirmationId'] = 'surge_confirmation_id';
-                } else {
-                    this.href = obj.href;
-                    this.surgeConfirmationId = obj.surge_confirmation_id;
-            
-                    // Append to variable dictionary
-                    this._variableDict['surgeConfirmationId'] = 'surge_confirmation_id';
-                }
+    .factory('SurgeConfirmation', ['BaseModel', SurgeConfirmationModel]);
+
+    function SurgeConfirmationModel(BaseModel) {
+        var SurgeConfirmation = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.href = this.getValue(obj.href);
+            this.surgeConfirmationId = this.getValue(obj.surgeConfirmationId);
+        };
+
+        SurgeConfirmation.prototype = new BaseModel();
+        SurgeConfirmation.prototype.constructor = SurgeConfirmation;
     
-            SurgeConfirmation.prototype = new BaseModel();
-            SurgeConfirmation.prototype.constructor = SurgeConfirmation;
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            SurgeConfirmation.prototype.getHref = function () {
-                return this.href;
-            };
-        
-            /**
-             * Setter for Href
-             * 
-             * @param {string} value 
-             */
-            SurgeConfirmation.prototype.setHref = function (value) {
-                this.href = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            SurgeConfirmation.prototype.getSurgeConfirmationId = function () {
-                return this.surgeConfirmationId;
-            };
-        
-            /**
-             * Setter for SurgeConfirmationId
-             * 
-             * @param {string} value 
-             */
-            SurgeConfirmation.prototype.setSurgeConfirmationId = function (value) {
-                this.surgeConfirmationId = value;
-            };
-        
-            return SurgeConfirmation;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        SurgeConfirmation.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'href', realName: 'href' },
+                { name: 'surgeConfirmationId', realName: 'surge_confirmation_id' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        SurgeConfirmation.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        SurgeConfirmation.prototype.getHref = function () {
+            return this.href;
+        };
+    
+        /**
+         * Setter for Href
+         * 
+         * @param {string} value 
+         */
+        SurgeConfirmation.prototype.setHref = function (value) {
+            this.href = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        SurgeConfirmation.prototype.getSurgeConfirmationId = function () {
+            return this.surgeConfirmationId;
+        };
+    
+        /**
+         * Setter for SurgeConfirmationId
+         * 
+         * @param {string} value 
+         */
+        SurgeConfirmation.prototype.setSurgeConfirmationId = function (value) {
+            this.surgeConfirmationId = value;
+        };
+    
+        return SurgeConfirmation;
+    }
 
 }(angular));

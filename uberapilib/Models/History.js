@@ -13,215 +13,219 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('History', ['BaseModel', 'Location',
-        function (BaseModel, Location) {
-            var History = function (obj) {
-                if (!obj) {
-                    this.distance = null;
-                    this.endLocation = null;
-                    this.endTime = null;
-                    this.productId = null;
-                    this.requestTime = null;
-                    this.startLocation = null;
-                    this.startTime = null;
-                    this.status = null;
-                    this.uuid = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['endLocation'] = 'end_location';
-                    this._variableDict['endTime'] = 'end_time';
-                    this._variableDict['productId'] = 'product_id';
-                    this._variableDict['requestTime'] = 'request_time';
-                    this._variableDict['startLocation'] = 'start_location';
-                    this._variableDict['startTime'] = 'start_time';
-                } else {
-                    this.distance = obj.distance;
-                    this.endLocation = new Location(obj.end_location);
-                    this.endTime = obj.end_time;
-                    this.productId = obj.product_id;
-                    this.requestTime = obj.request_time;
-                    this.startLocation = new Location(obj.start_location);
-                    this.startTime = obj.start_time;
-                    this.status = obj.status;
-                    this.uuid = obj.uuid;
-            
-                    // Append to variable dictionary
-                    this._variableDict['endLocation'] = 'end_location';
-                    this._variableDict['endTime'] = 'end_time';
-                    this._variableDict['productId'] = 'product_id';
-                    this._variableDict['requestTime'] = 'request_time';
-                    this._variableDict['startLocation'] = 'start_location';
-                    this._variableDict['startTime'] = 'start_time';
-                }
+    .factory('History', ['BaseModel', HistoryModel]);
+
+    function HistoryModel(BaseModel) {
+        var History = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.distance = this.getValue(obj.distance);
+            this.endLocation = this.getValue(obj.endLocation);
+            this.endTime = this.getValue(obj.endTime);
+            this.productId = this.getValue(obj.productId);
+            this.requestTime = this.getValue(obj.requestTime);
+            this.startLocation = this.getValue(obj.startLocation);
+            this.startTime = this.getValue(obj.startTime);
+            this.status = this.getValue(obj.status);
+            this.uuid = this.getValue(obj.uuid);
+        };
+
+        History.prototype = new BaseModel();
+        History.prototype.constructor = History;
     
-            History.prototype = new BaseModel();
-            History.prototype.constructor = History;
-        
-            /**
-             * Distance travelled
-             *
-             * @return {double}
-             */
-            History.prototype.getDistance = function () {
-                return this.distance;
-            };
-        
-            /**
-             * Setter for Distance
-             * 
-             * @param {double} value 
-             */
-            History.prototype.setDistance = function (value) {
-                this.distance = value;
-            };
-        
-            /**
-             * Location where journey ended
-             *
-             * @return {Location}
-             */
-            History.prototype.getEndLocation = function () {
-                return this.endLocation;
-            };
-        
-            /**
-             * Setter for EndLocation
-             * 
-             * @param {Location} value 
-             */
-            History.prototype.setEndLocation = function (value) {
-                this.endLocation = value;
-            };
-        
-            /**
-             * Time of journey end
-             *
-             * @return {int}
-             */
-            History.prototype.getEndTime = function () {
-                return this.endTime;
-            };
-        
-            /**
-             * Setter for EndTime
-             * 
-             * @param {int} value 
-             */
-            History.prototype.setEndTime = function (value) {
-                this.endTime = value;
-            };
-        
-            /**
-             * The product that was used
-             *
-             * @return {string}
-             */
-            History.prototype.getProductId = function () {
-                return this.productId;
-            };
-        
-            /**
-             * Setter for ProductId
-             * 
-             * @param {string} value 
-             */
-            History.prototype.setProductId = function (value) {
-                this.productId = value;
-            };
-        
-            /**
-             * Time when requested
-             *
-             * @return {int}
-             */
-            History.prototype.getRequestTime = function () {
-                return this.requestTime;
-            };
-        
-            /**
-             * Setter for RequestTime
-             * 
-             * @param {int} value 
-             */
-            History.prototype.setRequestTime = function (value) {
-                this.requestTime = value;
-            };
-        
-            /**
-             * Location of starting the journey
-             *
-             * @return {Location}
-             */
-            History.prototype.getStartLocation = function () {
-                return this.startLocation;
-            };
-        
-            /**
-             * Setter for StartLocation
-             * 
-             * @param {Location} value 
-             */
-            History.prototype.setStartLocation = function (value) {
-                this.startLocation = value;
-            };
-        
-            /**
-             * Time of starting the journey
-             *
-             * @return {int}
-             */
-            History.prototype.getStartTime = function () {
-                return this.startTime;
-            };
-        
-            /**
-             * Setter for StartTime
-             * 
-             * @param {int} value 
-             */
-            History.prototype.setStartTime = function (value) {
-                this.startTime = value;
-            };
-        
-            /**
-             * Status of the product e.g., completed
-             *
-             * @return {string}
-             */
-            History.prototype.getStatus = function () {
-                return this.status;
-            };
-        
-            /**
-             * Setter for Status
-             * 
-             * @param {string} value 
-             */
-            History.prototype.setStatus = function (value) {
-                this.status = value;
-            };
-        
-            /**
-             * History item id
-             *
-             * @return {string}
-             */
-            History.prototype.getUuid = function () {
-                return this.uuid;
-            };
-        
-            /**
-             * Setter for Uuid
-             * 
-             * @param {string} value 
-             */
-            History.prototype.setUuid = function (value) {
-                this.uuid = value;
-            };
-        
-            return History;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        History.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'distance', realName: 'distance' },
+                { name: 'endLocation', realName: 'end_location', type: 'Location' },
+                { name: 'endTime', realName: 'end_time' },
+                { name: 'productId', realName: 'product_id' },
+                { name: 'requestTime', realName: 'request_time' },
+                { name: 'startLocation', realName: 'start_location', type: 'Location' },
+                { name: 'startTime', realName: 'start_time' },
+                { name: 'status', realName: 'status' },
+                { name: 'uuid', realName: 'uuid' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        History.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * Distance travelled
+         *
+         * @return {double}
+         */
+        History.prototype.getDistance = function () {
+            return this.distance;
+        };
+    
+        /**
+         * Setter for Distance
+         * 
+         * @param {double} value 
+         */
+        History.prototype.setDistance = function (value) {
+            this.distance = value;
+        };
+    
+        /**
+         * Location where journey ended
+         *
+         * @return {Location}
+         */
+        History.prototype.getEndLocation = function () {
+            return this.endLocation;
+        };
+    
+        /**
+         * Setter for EndLocation
+         * 
+         * @param {Location} value 
+         */
+        History.prototype.setEndLocation = function (value) {
+            this.endLocation = value;
+        };
+    
+        /**
+         * Time of journey end
+         *
+         * @return {int}
+         */
+        History.prototype.getEndTime = function () {
+            return this.endTime;
+        };
+    
+        /**
+         * Setter for EndTime
+         * 
+         * @param {int} value 
+         */
+        History.prototype.setEndTime = function (value) {
+            this.endTime = value;
+        };
+    
+        /**
+         * The product that was used
+         *
+         * @return {string}
+         */
+        History.prototype.getProductId = function () {
+            return this.productId;
+        };
+    
+        /**
+         * Setter for ProductId
+         * 
+         * @param {string} value 
+         */
+        History.prototype.setProductId = function (value) {
+            this.productId = value;
+        };
+    
+        /**
+         * Time when requested
+         *
+         * @return {int}
+         */
+        History.prototype.getRequestTime = function () {
+            return this.requestTime;
+        };
+    
+        /**
+         * Setter for RequestTime
+         * 
+         * @param {int} value 
+         */
+        History.prototype.setRequestTime = function (value) {
+            this.requestTime = value;
+        };
+    
+        /**
+         * Location of starting the journey
+         *
+         * @return {Location}
+         */
+        History.prototype.getStartLocation = function () {
+            return this.startLocation;
+        };
+    
+        /**
+         * Setter for StartLocation
+         * 
+         * @param {Location} value 
+         */
+        History.prototype.setStartLocation = function (value) {
+            this.startLocation = value;
+        };
+    
+        /**
+         * Time of starting the journey
+         *
+         * @return {int}
+         */
+        History.prototype.getStartTime = function () {
+            return this.startTime;
+        };
+    
+        /**
+         * Setter for StartTime
+         * 
+         * @param {int} value 
+         */
+        History.prototype.setStartTime = function (value) {
+            this.startTime = value;
+        };
+    
+        /**
+         * Status of the product e.g., completed
+         *
+         * @return {string}
+         */
+        History.prototype.getStatus = function () {
+            return this.status;
+        };
+    
+        /**
+         * Setter for Status
+         * 
+         * @param {string} value 
+         */
+        History.prototype.setStatus = function (value) {
+            this.status = value;
+        };
+    
+        /**
+         * History item id
+         *
+         * @return {string}
+         */
+        History.prototype.getUuid = function () {
+            return this.uuid;
+        };
+    
+        /**
+         * Setter for Uuid
+         * 
+         * @param {string} value 
+         */
+        History.prototype.setUuid = function (value) {
+            this.uuid = value;
+        };
+    
+        return History;
+    }
 
 }(angular));

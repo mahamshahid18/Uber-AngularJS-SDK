@@ -13,85 +13,99 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('Vehicle', ['BaseModel',
-        function (BaseModel) {
-            var Vehicle = function (obj) {
-                if (!obj) {
-                    this.licensePlate = null;
-                    this.make = null;
-                    this.model = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['licensePlate'] = 'license_plate';
-                } else {
-                    this.licensePlate = obj.license_plate;
-                    this.make = obj.make;
-                    this.model = obj.model;
-            
-                    // Append to variable dictionary
-                    this._variableDict['licensePlate'] = 'license_plate';
-                }
+    .factory('Vehicle', ['BaseModel', VehicleModel]);
+
+    function VehicleModel(BaseModel) {
+        var Vehicle = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.licensePlate = this.getValue(obj.licensePlate);
+            this.make = this.getValue(obj.make);
+            this.model = this.getValue(obj.model);
+        };
+
+        Vehicle.prototype = new BaseModel();
+        Vehicle.prototype.constructor = Vehicle;
     
-            Vehicle.prototype = new BaseModel();
-            Vehicle.prototype.constructor = Vehicle;
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            Vehicle.prototype.getLicensePlate = function () {
-                return this.licensePlate;
-            };
-        
-            /**
-             * Setter for LicensePlate
-             * 
-             * @param {string} value 
-             */
-            Vehicle.prototype.setLicensePlate = function (value) {
-                this.licensePlate = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            Vehicle.prototype.getMake = function () {
-                return this.make;
-            };
-        
-            /**
-             * Setter for Make
-             * 
-             * @param {string} value 
-             */
-            Vehicle.prototype.setMake = function (value) {
-                this.make = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            Vehicle.prototype.getModel = function () {
-                return this.model;
-            };
-        
-            /**
-             * Setter for Model
-             * 
-             * @param {string} value 
-             */
-            Vehicle.prototype.setModel = function (value) {
-                this.model = value;
-            };
-        
-            return Vehicle;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        Vehicle.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'licensePlate', realName: 'license_plate' },
+                { name: 'make', realName: 'make' },
+                { name: 'model', realName: 'model' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        Vehicle.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        Vehicle.prototype.getLicensePlate = function () {
+            return this.licensePlate;
+        };
+    
+        /**
+         * Setter for LicensePlate
+         * 
+         * @param {string} value 
+         */
+        Vehicle.prototype.setLicensePlate = function (value) {
+            this.licensePlate = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        Vehicle.prototype.getMake = function () {
+            return this.make;
+        };
+    
+        /**
+         * Setter for Make
+         * 
+         * @param {string} value 
+         */
+        Vehicle.prototype.setMake = function (value) {
+            this.make = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        Vehicle.prototype.getModel = function () {
+            return this.model;
+        };
+    
+        /**
+         * Setter for Model
+         * 
+         * @param {string} value 
+         */
+        Vehicle.prototype.setModel = function (value) {
+            this.model = value;
+        };
+    
+        return Vehicle;
+    }
 
 }(angular));

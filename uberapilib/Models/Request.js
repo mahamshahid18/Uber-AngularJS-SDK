@@ -13,169 +13,182 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('Request', ['ErrorBase',
-        function (ErrorBase) {
-            var Request = function (obj) {
-                if (!obj) {
-                    ErrorBase.call(this, null);
-                    this.driver = null;
-                    this.eta = null;
-                    this.location = null;
-                    this.requestId = null;
-                    this.status = null;
-                    this.surgeMultiplier = null;
-                    this.vehicle = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['requestId'] = 'request_id';
-                    this._variableDict['surgeMultiplier'] = 'surge_multiplier';
-                } else {
-                    ErrorBase.call(this, obj);
-                    this.driver = obj.driver;
-                    this.eta = obj.eta;
-                    this.location = obj.location;
-                    this.requestId = obj.request_id;
-                    this.status = obj.status;
-                    this.surgeMultiplier = obj.surge_multiplier;
-                    this.vehicle = obj.vehicle;
-            
-                    // Append to variable dictionary
-                    this._variableDict['requestId'] = 'request_id';
-                    this._variableDict['surgeMultiplier'] = 'surge_multiplier';
-                }
+    .factory('Request', ['ErrorBase', RequestModel]);
+
+    function RequestModel(ErrorBase) {
+        var Request = function (obj) {
+            ErrorBase.call(this, obj);
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.driver = this.getValue(obj.driver);
+            this.eta = this.getValue(obj.eta);
+            this.location = this.getValue(obj.location);
+            this.requestId = this.getValue(obj.requestId);
+            this.status = this.getValue(obj.status);
+            this.surgeMultiplier = this.getValue(obj.surgeMultiplier);
+            this.vehicle = this.getValue(obj.vehicle);
+        };
+
+        Request.prototype = new ErrorBase();
+        Request.prototype.constructor = Request;
     
-            Request.prototype = new ErrorBase();
-            Request.prototype.constructor = Request;
-        
-            /**
-             * The object that contains driver details.
-             *
-             * @return {array}
-             */
-            Request.prototype.getDriver = function () {
-                return this.driver;
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        Request.prototype.mappingInfo = function() {
+            return ErrorBase.prototype.mappingInfo.call(this).concat([
+                { name: 'driver', realName: 'driver' },
+                { name: 'eta', realName: 'eta' },
+                { name: 'location', realName: 'location' },
+                { name: 'requestId', realName: 'request_id' },
+                { name: 'status', realName: 'status' },
+                { name: 'surgeMultiplier', realName: 'surge_multiplier' },
+                { name: 'vehicle', realName: 'vehicle' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        Request.prototype.discriminatorMap = function() {
+            return {
             };
-        
-            /**
-             * Setter for Driver
-             * 
-             * @param {array} value 
-             */
-            Request.prototype.setDriver = function (value) {
-                this.driver = value;
-            };
-        
-            /**
-             * The estimated time of vehicle arrival in minutes.
-             *
-             * @return {int}
-             */
-            Request.prototype.getEta = function () {
-                return this.eta;
-            };
-        
-            /**
-             * Setter for Eta
-             * 
-             * @param {int} value 
-             */
-            Request.prototype.setEta = function (value) {
-                this.eta = value;
-            };
-        
-            /**
-             * The object that contains the location information of the vehicle and driver
-             *
-             * @return {array}
-             */
-            Request.prototype.getLocation = function () {
-                return this.location;
-            };
-        
-            /**
-             * Setter for Location
-             * 
-             * @param {array} value 
-             */
-            Request.prototype.setLocation = function (value) {
-                this.location = value;
-            };
-        
-            /**
-             * The unique ID of the Request.
-             *
-             * @return {string}
-             */
-            Request.prototype.getRequestId = function () {
-                return this.requestId;
-            };
-        
-            /**
-             * Setter for RequestId
-             * 
-             * @param {string} value 
-             */
-            Request.prototype.setRequestId = function (value) {
-                this.requestId = value;
-            };
-        
-            /**
-             * The status of the Request indicating state.
-             *
-             * @return {string}
-             */
-            Request.prototype.getStatus = function () {
-                return this.status;
-            };
-        
-            /**
-             * Setter for Status
-             * 
-             * @param {string} value 
-             */
-            Request.prototype.setStatus = function (value) {
-                this.status = value;
-            };
-        
-            /**
-             * The surge pricing multiplier used to calculate the increased price of a Request. A multiplier of 1.0 means surge pricing is not in effect.
-             *
-             * @return {double}
-             */
-            Request.prototype.getSurgeMultiplier = function () {
-                return this.surgeMultiplier;
-            };
-        
-            /**
-             * Setter for SurgeMultiplier
-             * 
-             * @param {double} value 
-             */
-            Request.prototype.setSurgeMultiplier = function (value) {
-                this.surgeMultiplier = value;
-            };
-        
-            /**
-             * The object that contains vehicle details.
-             *
-             * @return {array}
-             */
-            Request.prototype.getVehicle = function () {
-                return this.vehicle;
-            };
-        
-            /**
-             * Setter for Vehicle
-             * 
-             * @param {array} value 
-             */
-            Request.prototype.setVehicle = function (value) {
-                this.vehicle = value;
-            };
-        
-            return Request;
-        }
-    ]);
+        };
+    
+        /**
+         * The object that contains driver details.
+         *
+         * @return {array}
+         */
+        Request.prototype.getDriver = function () {
+            return this.driver;
+        };
+    
+        /**
+         * Setter for Driver
+         * 
+         * @param {array} value 
+         */
+        Request.prototype.setDriver = function (value) {
+            this.driver = value;
+        };
+    
+        /**
+         * The estimated time of vehicle arrival in minutes.
+         *
+         * @return {int}
+         */
+        Request.prototype.getEta = function () {
+            return this.eta;
+        };
+    
+        /**
+         * Setter for Eta
+         * 
+         * @param {int} value 
+         */
+        Request.prototype.setEta = function (value) {
+            this.eta = value;
+        };
+    
+        /**
+         * The object that contains the location information of the vehicle and driver
+         *
+         * @return {array}
+         */
+        Request.prototype.getLocation = function () {
+            return this.location;
+        };
+    
+        /**
+         * Setter for Location
+         * 
+         * @param {array} value 
+         */
+        Request.prototype.setLocation = function (value) {
+            this.location = value;
+        };
+    
+        /**
+         * The unique ID of the Request.
+         *
+         * @return {string}
+         */
+        Request.prototype.getRequestId = function () {
+            return this.requestId;
+        };
+    
+        /**
+         * Setter for RequestId
+         * 
+         * @param {string} value 
+         */
+        Request.prototype.setRequestId = function (value) {
+            this.requestId = value;
+        };
+    
+        /**
+         * The status of the Request indicating state.
+         *
+         * @return {string}
+         */
+        Request.prototype.getStatus = function () {
+            return this.status;
+        };
+    
+        /**
+         * Setter for Status
+         * 
+         * @param {string} value 
+         */
+        Request.prototype.setStatus = function (value) {
+            this.status = value;
+        };
+    
+        /**
+         * The surge pricing multiplier used to calculate the increased price of a Request. A multiplier of 1.0
+         * means surge pricing is not in effect.
+         *
+         * @return {double}
+         */
+        Request.prototype.getSurgeMultiplier = function () {
+            return this.surgeMultiplier;
+        };
+    
+        /**
+         * Setter for SurgeMultiplier
+         * 
+         * @param {double} value 
+         */
+        Request.prototype.setSurgeMultiplier = function (value) {
+            this.surgeMultiplier = value;
+        };
+    
+        /**
+         * The object that contains vehicle details.
+         *
+         * @return {array}
+         */
+        Request.prototype.getVehicle = function () {
+            return this.vehicle;
+        };
+    
+        /**
+         * Setter for Vehicle
+         * 
+         * @param {array} value 
+         */
+        Request.prototype.setVehicle = function (value) {
+            this.vehicle = value;
+        };
+    
+        return Request;
+    }
 
 }(angular));

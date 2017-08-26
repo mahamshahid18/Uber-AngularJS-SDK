@@ -13,129 +13,139 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('UserProfile', ['BaseModel',
-        function (BaseModel) {
-            var UserProfile = function (obj) {
-                if (!obj) {
-                    this.email = null;
-                    this.firstName = null;
-                    this.lastName = null;
-                    this.picture = null;
-                    this.promoCode = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['firstName'] = 'first_name';
-                    this._variableDict['lastName'] = 'last_name';
-                    this._variableDict['promoCode'] = 'promo_code';
-                } else {
-                    this.email = obj.email;
-                    this.firstName = obj.first_name;
-                    this.lastName = obj.last_name;
-                    this.picture = obj.picture;
-                    this.promoCode = obj.promo_code;
-            
-                    // Append to variable dictionary
-                    this._variableDict['firstName'] = 'first_name';
-                    this._variableDict['lastName'] = 'last_name';
-                    this._variableDict['promoCode'] = 'promo_code';
-                }
+    .factory('UserProfile', ['BaseModel', UserProfileModel]);
+
+    function UserProfileModel(BaseModel) {
+        var UserProfile = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.email = this.getValue(obj.email);
+            this.firstName = this.getValue(obj.firstName);
+            this.lastName = this.getValue(obj.lastName);
+            this.picture = this.getValue(obj.picture);
+            this.promoCode = this.getValue(obj.promoCode);
+        };
+
+        UserProfile.prototype = new BaseModel();
+        UserProfile.prototype.constructor = UserProfile;
     
-            UserProfile.prototype = new BaseModel();
-            UserProfile.prototype.constructor = UserProfile;
-        
-            /**
-             * Email address of the Uber user
-             *
-             * @return {string}
-             */
-            UserProfile.prototype.getEmail = function () {
-                return this.email;
-            };
-        
-            /**
-             * Setter for Email
-             * 
-             * @param {string} value 
-             */
-            UserProfile.prototype.setEmail = function (value) {
-                this.email = value;
-            };
-        
-            /**
-             * First name of the Uber user.
-             *
-             * @return {string}
-             */
-            UserProfile.prototype.getFirstName = function () {
-                return this.firstName;
-            };
-        
-            /**
-             * Setter for FirstName
-             * 
-             * @param {string} value 
-             */
-            UserProfile.prototype.setFirstName = function (value) {
-                this.firstName = value;
-            };
-        
-            /**
-             * Last name of the Uber user.
-             *
-             * @return {string}
-             */
-            UserProfile.prototype.getLastName = function () {
-                return this.lastName;
-            };
-        
-            /**
-             * Setter for LastName
-             * 
-             * @param {string} value 
-             */
-            UserProfile.prototype.setLastName = function (value) {
-                this.lastName = value;
-            };
-        
-            /**
-             * Image URL of the Uber user.
-             *
-             * @return {string}
-             */
-            UserProfile.prototype.getPicture = function () {
-                return this.picture;
-            };
-        
-            /**
-             * Setter for Picture
-             * 
-             * @param {string} value 
-             */
-            UserProfile.prototype.setPicture = function (value) {
-                this.picture = value;
-            };
-        
-            /**
-             * Promo code of the Uber user.
-             *
-             * @return {string}
-             */
-            UserProfile.prototype.getPromoCode = function () {
-                return this.promoCode;
-            };
-        
-            /**
-             * Setter for PromoCode
-             * 
-             * @param {string} value 
-             */
-            UserProfile.prototype.setPromoCode = function (value) {
-                this.promoCode = value;
-            };
-        
-            return UserProfile;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        UserProfile.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'email', realName: 'email' },
+                { name: 'firstName', realName: 'first_name' },
+                { name: 'lastName', realName: 'last_name' },
+                { name: 'picture', realName: 'picture' },
+                { name: 'promoCode', realName: 'promo_code' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        UserProfile.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * Email address of the Uber user
+         *
+         * @return {string}
+         */
+        UserProfile.prototype.getEmail = function () {
+            return this.email;
+        };
+    
+        /**
+         * Setter for Email
+         * 
+         * @param {string} value 
+         */
+        UserProfile.prototype.setEmail = function (value) {
+            this.email = value;
+        };
+    
+        /**
+         * First name of the Uber user.
+         *
+         * @return {string}
+         */
+        UserProfile.prototype.getFirstName = function () {
+            return this.firstName;
+        };
+    
+        /**
+         * Setter for FirstName
+         * 
+         * @param {string} value 
+         */
+        UserProfile.prototype.setFirstName = function (value) {
+            this.firstName = value;
+        };
+    
+        /**
+         * Last name of the Uber user.
+         *
+         * @return {string}
+         */
+        UserProfile.prototype.getLastName = function () {
+            return this.lastName;
+        };
+    
+        /**
+         * Setter for LastName
+         * 
+         * @param {string} value 
+         */
+        UserProfile.prototype.setLastName = function (value) {
+            this.lastName = value;
+        };
+    
+        /**
+         * Image URL of the Uber user.
+         *
+         * @return {string}
+         */
+        UserProfile.prototype.getPicture = function () {
+            return this.picture;
+        };
+    
+        /**
+         * Setter for Picture
+         * 
+         * @param {string} value 
+         */
+        UserProfile.prototype.setPicture = function (value) {
+            this.picture = value;
+        };
+    
+        /**
+         * Promo code of the Uber user.
+         *
+         * @return {string}
+         */
+        UserProfile.prototype.getPromoCode = function () {
+            return this.promoCode;
+        };
+    
+        /**
+         * Setter for PromoCode
+         * 
+         * @param {string} value 
+         */
+        UserProfile.prototype.setPromoCode = function (value) {
+            this.promoCode = value;
+        };
+    
+        return UserProfile;
+    }
 
 }(angular));

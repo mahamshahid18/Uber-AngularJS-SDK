@@ -13,101 +13,120 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('UserActivity', ['BaseModel', 'History',
-        function (BaseModel, History) {
-            var UserActivity = function (obj) {
-                if (!obj) {
-                    this.count = null;
-                    this.history = null;
-                    this.limit = null;
-                    this.offset = null;
-                } else {
-                    this.count = obj.count;
-                    this.history = obj.history.map(function (model) {
-                        return new History(model);
-                    });
-                    this.limit = obj.limit;
-                    this.offset = obj.offset;
-                }
+    .factory('UserActivity', ['BaseModel', UserActivityModel]);
+
+    function UserActivityModel(BaseModel) {
+        var UserActivity = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.count = this.getValue(obj.count);
+            this.history = this.getValue(obj.history);
+            this.limit = this.getValue(obj.limit);
+            this.offset = this.getValue(obj.offset);
+        };
+
+        UserActivity.prototype = new BaseModel();
+        UserActivity.prototype.constructor = UserActivity;
     
-            UserActivity.prototype = new BaseModel();
-            UserActivity.prototype.constructor = UserActivity;
-        
-            /**
-             * Total number of items available.
-             *
-             * @return {int}
-             */
-            UserActivity.prototype.getCount = function () {
-                return this.count;
-            };
-        
-            /**
-             * Setter for Count
-             * 
-             * @param {int} value 
-             */
-            UserActivity.prototype.setCount = function (value) {
-                this.count = value;
-            };
-        
-            /**
-             * Information including the pickup location, dropoff location, request start time, request end time, and distance of requests (in miles), as well as the product type that was requested.
-             *
-             * @return {array}
-             */
-            UserActivity.prototype.getHistory = function () {
-                return this.history;
-            };
-        
-            /**
-             * Setter for History
-             * 
-             * @param {array} value 
-             */
-            UserActivity.prototype.setHistory = function (value) {
-                this.history = value;
-            };
-        
-            /**
-             * Number of items to retrieve (100 max).
-             *
-             * @return {int}
-             */
-            UserActivity.prototype.getLimit = function () {
-                return this.limit;
-            };
-        
-            /**
-             * Setter for Limit
-             * 
-             * @param {int} value 
-             */
-            UserActivity.prototype.setLimit = function (value) {
-                this.limit = value;
-            };
-        
-            /**
-             * Position in pagination.
-             *
-             * @return {int}
-             */
-            UserActivity.prototype.getOffset = function () {
-                return this.offset;
-            };
-        
-            /**
-             * Setter for Offset
-             * 
-             * @param {int} value 
-             */
-            UserActivity.prototype.setOffset = function (value) {
-                this.offset = value;
-            };
-        
-            return UserActivity;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        UserActivity.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'count', realName: 'count' },
+                { name: 'history', realName: 'history', array: true, type: 'History' },
+                { name: 'limit', realName: 'limit' },
+                { name: 'offset', realName: 'offset' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        UserActivity.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * Total number of items available.
+         *
+         * @return {int}
+         */
+        UserActivity.prototype.getCount = function () {
+            return this.count;
+        };
+    
+        /**
+         * Setter for Count
+         * 
+         * @param {int} value 
+         */
+        UserActivity.prototype.setCount = function (value) {
+            this.count = value;
+        };
+    
+        /**
+         * Information including the pickup location, dropoff location, request start time, request end time, and
+         * distance of requests (in miles), as well as the product type that was requested.
+         *
+         * @return {array}
+         */
+        UserActivity.prototype.getHistory = function () {
+            return this.history;
+        };
+    
+        /**
+         * Setter for History
+         * 
+         * @param {array} value 
+         */
+        UserActivity.prototype.setHistory = function (value) {
+            this.history = value;
+        };
+    
+        /**
+         * Number of items to retrieve (100 max).
+         *
+         * @return {int}
+         */
+        UserActivity.prototype.getLimit = function () {
+            return this.limit;
+        };
+    
+        /**
+         * Setter for Limit
+         * 
+         * @param {int} value 
+         */
+        UserActivity.prototype.setLimit = function (value) {
+            this.limit = value;
+        };
+    
+        /**
+         * Position in pagination.
+         *
+         * @return {int}
+         */
+        UserActivity.prototype.getOffset = function () {
+            return this.offset;
+        };
+    
+        /**
+         * Setter for Offset
+         * 
+         * @param {int} value 
+         */
+        UserActivity.prototype.setOffset = function (value) {
+            this.offset = value;
+        };
+    
+        return UserActivity;
+    }
 
 }(angular));

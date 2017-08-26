@@ -13,87 +13,99 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('PromotionsResponse', ['BaseModel',
-        function (BaseModel) {
-            var PromotionsResponse = function (obj) {
-                if (!obj) {
-                    this.displayText = null;
-                    this.localizedValue = null;
-                    this.type = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['displayText'] = 'display_text';
-                    this._variableDict['localizedValue'] = 'localized_value';
-                } else {
-                    this.displayText = obj.display_text;
-                    this.localizedValue = obj.localized_value;
-                    this.type = obj.type;
-            
-                    // Append to variable dictionary
-                    this._variableDict['displayText'] = 'display_text';
-                    this._variableDict['localizedValue'] = 'localized_value';
-                }
+    .factory('PromotionsResponse', ['BaseModel', PromotionsResponseModel]);
+
+    function PromotionsResponseModel(BaseModel) {
+        var PromotionsResponse = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.displayText = this.getValue(obj.displayText);
+            this.localizedValue = this.getValue(obj.localizedValue);
+            this.type = this.getValue(obj.type);
+        };
+
+        PromotionsResponse.prototype = new BaseModel();
+        PromotionsResponse.prototype.constructor = PromotionsResponse;
     
-            PromotionsResponse.prototype = new BaseModel();
-            PromotionsResponse.prototype.constructor = PromotionsResponse;
-        
-            /**
-             * A localized string we recommend to use when offering the promotion to users.
-             *
-             * @return {string}
-             */
-            PromotionsResponse.prototype.getDisplayText = function () {
-                return this.displayText;
-            };
-        
-            /**
-             * Setter for DisplayText
-             * 
-             * @param {string} value 
-             */
-            PromotionsResponse.prototype.setDisplayText = function (value) {
-                this.displayText = value;
-            };
-        
-            /**
-             * The value of the promotion that is available to a user in this location in the local currency.
-             *
-             * @return {string}
-             */
-            PromotionsResponse.prototype.getLocalizedValue = function () {
-                return this.localizedValue;
-            };
-        
-            /**
-             * Setter for LocalizedValue
-             * 
-             * @param {string} value 
-             */
-            PromotionsResponse.prototype.setLocalizedValue = function (value) {
-                this.localizedValue = value;
-            };
-        
-            /**
-             * The type of the promo which is either "trip_credit" or "account_credit".
-             *
-             * @return {string}
-             */
-            PromotionsResponse.prototype.getType = function () {
-                return this.type;
-            };
-        
-            /**
-             * Setter for Type
-             * 
-             * @param {string} value 
-             */
-            PromotionsResponse.prototype.setType = function (value) {
-                this.type = value;
-            };
-        
-            return PromotionsResponse;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        PromotionsResponse.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'displayText', realName: 'display_text' },
+                { name: 'localizedValue', realName: 'localized_value' },
+                { name: 'type', realName: 'type' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        PromotionsResponse.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * A localized string we recommend to use when offering the promotion to users.
+         *
+         * @return {string}
+         */
+        PromotionsResponse.prototype.getDisplayText = function () {
+            return this.displayText;
+        };
+    
+        /**
+         * Setter for DisplayText
+         * 
+         * @param {string} value 
+         */
+        PromotionsResponse.prototype.setDisplayText = function (value) {
+            this.displayText = value;
+        };
+    
+        /**
+         * The value of the promotion that is available to a user in this location in the local currency.
+         *
+         * @return {string}
+         */
+        PromotionsResponse.prototype.getLocalizedValue = function () {
+            return this.localizedValue;
+        };
+    
+        /**
+         * Setter for LocalizedValue
+         * 
+         * @param {string} value 
+         */
+        PromotionsResponse.prototype.setLocalizedValue = function (value) {
+            this.localizedValue = value;
+        };
+    
+        /**
+         * The type of the promo which is either "trip_credit" or "account_credit".
+         *
+         * @return {string}
+         */
+        PromotionsResponse.prototype.getType = function () {
+            return this.type;
+        };
+    
+        /**
+         * Setter for Type
+         * 
+         * @param {string} value 
+         */
+        PromotionsResponse.prototype.setType = function (value) {
+            this.type = value;
+        };
+    
+        return PromotionsResponse;
+    }
 
 }(angular));

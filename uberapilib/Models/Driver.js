@@ -13,107 +13,119 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('Driver', ['BaseModel',
-        function (BaseModel) {
-            var Driver = function (obj) {
-                if (!obj) {
-                    this.name = null;
-                    this.phoneNumber = null;
-                    this.pictureUrl = null;
-                    this.rating = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['phoneNumber'] = 'phone_number';
-                    this._variableDict['pictureUrl'] = 'picture_url';
-                } else {
-                    this.name = obj.name;
-                    this.phoneNumber = obj.phone_number;
-                    this.pictureUrl = obj.picture_url;
-                    this.rating = obj.rating;
-            
-                    // Append to variable dictionary
-                    this._variableDict['phoneNumber'] = 'phone_number';
-                    this._variableDict['pictureUrl'] = 'picture_url';
-                }
+    .factory('Driver', ['BaseModel', DriverModel]);
+
+    function DriverModel(BaseModel) {
+        var Driver = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.name = this.getValue(obj.name);
+            this.phoneNumber = this.getValue(obj.phoneNumber);
+            this.pictureUrl = this.getValue(obj.pictureUrl);
+            this.rating = this.getValue(obj.rating);
+        };
+
+        Driver.prototype = new BaseModel();
+        Driver.prototype.constructor = Driver;
     
-            Driver.prototype = new BaseModel();
-            Driver.prototype.constructor = Driver;
-        
-            /**
-             * The first name of the driver.
-             *
-             * @return {string}
-             */
-            Driver.prototype.getName = function () {
-                return this.name;
-            };
-        
-            /**
-             * Setter for Name
-             * 
-             * @param {string} value 
-             */
-            Driver.prototype.setName = function (value) {
-                this.name = value;
-            };
-        
-            /**
-             * The formatted phone number for contacting the driver.
-             *
-             * @return {string}
-             */
-            Driver.prototype.getPhoneNumber = function () {
-                return this.phoneNumber;
-            };
-        
-            /**
-             * Setter for PhoneNumber
-             * 
-             * @param {string} value 
-             */
-            Driver.prototype.setPhoneNumber = function (value) {
-                this.phoneNumber = value;
-            };
-        
-            /**
-             * The URL to the photo of the driver.
-             *
-             * @return {string}
-             */
-            Driver.prototype.getPictureUrl = function () {
-                return this.pictureUrl;
-            };
-        
-            /**
-             * Setter for PictureUrl
-             * 
-             * @param {string} value 
-             */
-            Driver.prototype.setPictureUrl = function (value) {
-                this.pictureUrl = value;
-            };
-        
-            /**
-             * The driver's star rating out of 5 stars.
-             *
-             * @return {double}
-             */
-            Driver.prototype.getRating = function () {
-                return this.rating;
-            };
-        
-            /**
-             * Setter for Rating
-             * 
-             * @param {double} value 
-             */
-            Driver.prototype.setRating = function (value) {
-                this.rating = value;
-            };
-        
-            return Driver;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        Driver.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'name', realName: 'name' },
+                { name: 'phoneNumber', realName: 'phone_number' },
+                { name: 'pictureUrl', realName: 'picture_url' },
+                { name: 'rating', realName: 'rating' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        Driver.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * The first name of the driver.
+         *
+         * @return {string}
+         */
+        Driver.prototype.getName = function () {
+            return this.name;
+        };
+    
+        /**
+         * Setter for Name
+         * 
+         * @param {string} value 
+         */
+        Driver.prototype.setName = function (value) {
+            this.name = value;
+        };
+    
+        /**
+         * The formatted phone number for contacting the driver.
+         *
+         * @return {string}
+         */
+        Driver.prototype.getPhoneNumber = function () {
+            return this.phoneNumber;
+        };
+    
+        /**
+         * Setter for PhoneNumber
+         * 
+         * @param {string} value 
+         */
+        Driver.prototype.setPhoneNumber = function (value) {
+            this.phoneNumber = value;
+        };
+    
+        /**
+         * The URL to the photo of the driver.
+         *
+         * @return {string}
+         */
+        Driver.prototype.getPictureUrl = function () {
+            return this.pictureUrl;
+        };
+    
+        /**
+         * Setter for PictureUrl
+         * 
+         * @param {string} value 
+         */
+        Driver.prototype.setPictureUrl = function (value) {
+            this.pictureUrl = value;
+        };
+    
+        /**
+         * The driver's star rating out of 5 stars.
+         *
+         * @return {double}
+         */
+        Driver.prototype.getRating = function () {
+            return this.rating;
+        };
+    
+        /**
+         * Setter for Rating
+         * 
+         * @param {double} value 
+         */
+        Driver.prototype.setRating = function (value) {
+            this.rating = value;
+        };
+    
+        return Driver;
+    }
 
 }(angular));

@@ -13,65 +13,79 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('RequestMapResponse', ['BaseModel',
-        function (BaseModel) {
-            var RequestMapResponse = function (obj) {
-                if (!obj) {
-                    this.href = null;
-                    this.requestId = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['requestId'] = 'request_id';
-                } else {
-                    this.href = obj.href;
-                    this.requestId = obj.request_id;
-            
-                    // Append to variable dictionary
-                    this._variableDict['requestId'] = 'request_id';
-                }
+    .factory('RequestMapResponse', ['BaseModel', RequestMapResponseModel]);
+
+    function RequestMapResponseModel(BaseModel) {
+        var RequestMapResponse = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.href = this.getValue(obj.href);
+            this.requestId = this.getValue(obj.requestId);
+        };
+
+        RequestMapResponse.prototype = new BaseModel();
+        RequestMapResponse.prototype.constructor = RequestMapResponse;
     
-            RequestMapResponse.prototype = new BaseModel();
-            RequestMapResponse.prototype.constructor = RequestMapResponse;
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            RequestMapResponse.prototype.getHref = function () {
-                return this.href;
-            };
-        
-            /**
-             * Setter for Href
-             * 
-             * @param {string} value 
-             */
-            RequestMapResponse.prototype.setHref = function (value) {
-                this.href = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            RequestMapResponse.prototype.getRequestId = function () {
-                return this.requestId;
-            };
-        
-            /**
-             * Setter for RequestId
-             * 
-             * @param {string} value 
-             */
-            RequestMapResponse.prototype.setRequestId = function (value) {
-                this.requestId = value;
-            };
-        
-            return RequestMapResponse;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        RequestMapResponse.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'href', realName: 'href' },
+                { name: 'requestId', realName: 'request_id' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        RequestMapResponse.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        RequestMapResponse.prototype.getHref = function () {
+            return this.href;
+        };
+    
+        /**
+         * Setter for Href
+         * 
+         * @param {string} value 
+         */
+        RequestMapResponse.prototype.setHref = function (value) {
+            this.href = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        RequestMapResponse.prototype.getRequestId = function () {
+            return this.requestId;
+        };
+    
+        /**
+         * Setter for RequestId
+         * 
+         * @param {string} value 
+         */
+        RequestMapResponse.prototype.setRequestId = function (value) {
+            this.requestId = value;
+        };
+    
+        return RequestMapResponse;
+    }
 
 }(angular));

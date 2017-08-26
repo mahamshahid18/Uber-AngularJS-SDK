@@ -7,6 +7,6 @@
 ;(function (angular) {
 	'use strict';
 
-	angular.module('TesterLib', []);
+	angular.module('UberAPILib', ['angularMoment']);
 
 }(angular));

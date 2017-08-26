@@ -13,41 +13,59 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('ProductCollection', ['BaseModel', 'Product',
-        function (BaseModel, Product) {
-            var ProductCollection = function (obj) {
-                if (!obj) {
-                    this.products = null;
-                } else {
-                    this.products = obj.products.map(function (model) {
-                        return new Product(model);
-                    });
-                }
+    .factory('ProductCollection', ['BaseModel', ProductCollectionModel]);
+
+    function ProductCollectionModel(BaseModel) {
+        var ProductCollection = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.products = this.getValue(obj.products);
+        };
+
+        ProductCollection.prototype = new BaseModel();
+        ProductCollection.prototype.constructor = ProductCollection;
     
-            ProductCollection.prototype = new BaseModel();
-            ProductCollection.prototype.constructor = ProductCollection;
-        
-            /**
-             * List of products
-             *
-             * @return {array}
-             */
-            ProductCollection.prototype.getProducts = function () {
-                return this.products;
-            };
-        
-            /**
-             * Setter for Products
-             * 
-             * @param {array} value 
-             */
-            ProductCollection.prototype.setProducts = function (value) {
-                this.products = value;
-            };
-        
-            return ProductCollection;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        ProductCollection.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'products', realName: 'products', array: true, type: 'Product' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        ProductCollection.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * List of products
+         *
+         * @return {array}
+         */
+        ProductCollection.prototype.getProducts = function () {
+            return this.products;
+        };
+    
+        /**
+         * Setter for Products
+         * 
+         * @param {array} value 
+         */
+        ProductCollection.prototype.setProducts = function (value) {
+            this.products = value;
+        };
+    
+        return ProductCollection;
+    }
 
 }(angular));

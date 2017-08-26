@@ -13,215 +13,222 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('PriceEsitmate', ['BaseModel',
-        function (BaseModel) {
-            var PriceEsitmate = function (obj) {
-                if (!obj) {
-                    this.currencyCode = null;
-                    this.displayName = null;
-                    this.distance = null;
-                    this.duration = null;
-                    this.estimate = null;
-                    this.highEstimate = null;
-                    this.lowEstimate = null;
-                    this.productId = null;
-                    this.surgeMultiplier = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['currencyCode'] = 'currency_code';
-                    this._variableDict['displayName'] = 'display_name';
-                    this._variableDict['highEstimate'] = 'high_estimate';
-                    this._variableDict['lowEstimate'] = 'low_estimate';
-                    this._variableDict['productId'] = 'product_id';
-                    this._variableDict['surgeMultiplier'] = 'surge_multiplier';
-                } else {
-                    this.currencyCode = obj.currency_code;
-                    this.displayName = obj.display_name;
-                    this.distance = obj.distance;
-                    this.duration = obj.duration;
-                    this.estimate = obj.estimate;
-                    this.highEstimate = obj.high_estimate;
-                    this.lowEstimate = obj.low_estimate;
-                    this.productId = obj.product_id;
-                    this.surgeMultiplier = obj.surge_multiplier;
-            
-                    // Append to variable dictionary
-                    this._variableDict['currencyCode'] = 'currency_code';
-                    this._variableDict['displayName'] = 'display_name';
-                    this._variableDict['highEstimate'] = 'high_estimate';
-                    this._variableDict['lowEstimate'] = 'low_estimate';
-                    this._variableDict['productId'] = 'product_id';
-                    this._variableDict['surgeMultiplier'] = 'surge_multiplier';
-                }
+    .factory('PriceEsitmate', ['BaseModel', PriceEsitmateModel]);
+
+    function PriceEsitmateModel(BaseModel) {
+        var PriceEsitmate = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.currencyCode = this.getValue(obj.currencyCode);
+            this.displayName = this.getValue(obj.displayName);
+            this.distance = this.getValue(obj.distance);
+            this.duration = this.getValue(obj.duration);
+            this.estimate = this.getValue(obj.estimate);
+            this.highEstimate = this.getValue(obj.highEstimate);
+            this.lowEstimate = this.getValue(obj.lowEstimate);
+            this.productId = this.getValue(obj.productId);
+            this.surgeMultiplier = this.getValue(obj.surgeMultiplier);
+        };
+
+        PriceEsitmate.prototype = new BaseModel();
+        PriceEsitmate.prototype.constructor = PriceEsitmate;
     
-            PriceEsitmate.prototype = new BaseModel();
-            PriceEsitmate.prototype.constructor = PriceEsitmate;
-        
-            /**
-             * ISO 4217 currency code.
-             *
-             * @return {string}
-             */
-            PriceEsitmate.prototype.getCurrencyCode = function () {
-                return this.currencyCode;
-            };
-        
-            /**
-             * Setter for CurrencyCode
-             * 
-             * @param {string} value 
-             */
-            PriceEsitmate.prototype.setCurrencyCode = function (value) {
-                this.currencyCode = value;
-            };
-        
-            /**
-             * Display name of product.
-             *
-             * @return {string}
-             */
-            PriceEsitmate.prototype.getDisplayName = function () {
-                return this.displayName;
-            };
-        
-            /**
-             * Setter for DisplayName
-             * 
-             * @param {string} value 
-             */
-            PriceEsitmate.prototype.setDisplayName = function (value) {
-                this.displayName = value;
-            };
-        
-            /**
-             * Expected activity distance (in miles).
-             *
-             * @return {double}
-             */
-            PriceEsitmate.prototype.getDistance = function () {
-                return this.distance;
-            };
-        
-            /**
-             * Setter for Distance
-             * 
-             * @param {double} value 
-             */
-            PriceEsitmate.prototype.setDistance = function (value) {
-                this.distance = value;
-            };
-        
-            /**
-             * Expected activity duration (in seconds). Always show duration in minutes.
-             *
-             * @return {int}
-             */
-            PriceEsitmate.prototype.getDuration = function () {
-                return this.duration;
-            };
-        
-            /**
-             * Setter for Duration
-             * 
-             * @param {int} value 
-             */
-            PriceEsitmate.prototype.setDuration = function (value) {
-                this.duration = value;
-            };
-        
-            /**
-             * Formatted string of estimate in local currency of the start location. Estimate could be a range, a single number (flat rate) or "Metered" for TAXI.
-             *
-             * @return {string}
-             */
-            PriceEsitmate.prototype.getEstimate = function () {
-                return this.estimate;
-            };
-        
-            /**
-             * Setter for Estimate
-             * 
-             * @param {string} value 
-             */
-            PriceEsitmate.prototype.setEstimate = function (value) {
-                this.estimate = value;
-            };
-        
-            /**
-             * Upper bound of the estimated price.
-             *
-             * @return {int}
-             */
-            PriceEsitmate.prototype.getHighEstimate = function () {
-                return this.highEstimate;
-            };
-        
-            /**
-             * Setter for HighEstimate
-             * 
-             * @param {int} value 
-             */
-            PriceEsitmate.prototype.setHighEstimate = function (value) {
-                this.highEstimate = value;
-            };
-        
-            /**
-             * Lower bound of the estimated price.
-             *
-             * @return {int}
-             */
-            PriceEsitmate.prototype.getLowEstimate = function () {
-                return this.lowEstimate;
-            };
-        
-            /**
-             * Setter for LowEstimate
-             * 
-             * @param {int} value 
-             */
-            PriceEsitmate.prototype.setLowEstimate = function (value) {
-                this.lowEstimate = value;
-            };
-        
-            /**
-             * Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in San Francisco will have a different product_id than uberX in Los Angeles.
-             *
-             * @return {string}
-             */
-            PriceEsitmate.prototype.getProductId = function () {
-                return this.productId;
-            };
-        
-            /**
-             * Setter for ProductId
-             * 
-             * @param {string} value 
-             */
-            PriceEsitmate.prototype.setProductId = function (value) {
-                this.productId = value;
-            };
-        
-            /**
-             * Expected surge multiplier. Surge is active if surge_multiplier is greater than 1. Price estimate already factors in the surge multiplier.
-             *
-             * @return {double}
-             */
-            PriceEsitmate.prototype.getSurgeMultiplier = function () {
-                return this.surgeMultiplier;
-            };
-        
-            /**
-             * Setter for SurgeMultiplier
-             * 
-             * @param {double} value 
-             */
-            PriceEsitmate.prototype.setSurgeMultiplier = function (value) {
-                this.surgeMultiplier = value;
-            };
-        
-            return PriceEsitmate;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        PriceEsitmate.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'currencyCode', realName: 'currency_code' },
+                { name: 'displayName', realName: 'display_name' },
+                { name: 'distance', realName: 'distance' },
+                { name: 'duration', realName: 'duration' },
+                { name: 'estimate', realName: 'estimate' },
+                { name: 'highEstimate', realName: 'high_estimate' },
+                { name: 'lowEstimate', realName: 'low_estimate' },
+                { name: 'productId', realName: 'product_id' },
+                { name: 'surgeMultiplier', realName: 'surge_multiplier' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        PriceEsitmate.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * ISO 4217 currency code.
+         *
+         * @return {string}
+         */
+        PriceEsitmate.prototype.getCurrencyCode = function () {
+            return this.currencyCode;
+        };
+    
+        /**
+         * Setter for CurrencyCode
+         * 
+         * @param {string} value 
+         */
+        PriceEsitmate.prototype.setCurrencyCode = function (value) {
+            this.currencyCode = value;
+        };
+    
+        /**
+         * Display name of product.
+         *
+         * @return {string}
+         */
+        PriceEsitmate.prototype.getDisplayName = function () {
+            return this.displayName;
+        };
+    
+        /**
+         * Setter for DisplayName
+         * 
+         * @param {string} value 
+         */
+        PriceEsitmate.prototype.setDisplayName = function (value) {
+            this.displayName = value;
+        };
+    
+        /**
+         * Expected activity distance (in miles).
+         *
+         * @return {double}
+         */
+        PriceEsitmate.prototype.getDistance = function () {
+            return this.distance;
+        };
+    
+        /**
+         * Setter for Distance
+         * 
+         * @param {double} value 
+         */
+        PriceEsitmate.prototype.setDistance = function (value) {
+            this.distance = value;
+        };
+    
+        /**
+         * Expected activity duration (in seconds). Always show duration in minutes.
+         *
+         * @return {int}
+         */
+        PriceEsitmate.prototype.getDuration = function () {
+            return this.duration;
+        };
+    
+        /**
+         * Setter for Duration
+         * 
+         * @param {int} value 
+         */
+        PriceEsitmate.prototype.setDuration = function (value) {
+            this.duration = value;
+        };
+    
+        /**
+         * Formatted string of estimate in local currency of the start location. Estimate could be a range, a single
+         * number (flat rate) or "Metered" for TAXI.
+         *
+         * @return {string}
+         */
+        PriceEsitmate.prototype.getEstimate = function () {
+            return this.estimate;
+        };
+    
+        /**
+         * Setter for Estimate
+         * 
+         * @param {string} value 
+         */
+        PriceEsitmate.prototype.setEstimate = function (value) {
+            this.estimate = value;
+        };
+    
+        /**
+         * Upper bound of the estimated price.
+         *
+         * @return {int}
+         */
+        PriceEsitmate.prototype.getHighEstimate = function () {
+            return this.highEstimate;
+        };
+    
+        /**
+         * Setter for HighEstimate
+         * 
+         * @param {int} value 
+         */
+        PriceEsitmate.prototype.setHighEstimate = function (value) {
+            this.highEstimate = value;
+        };
+    
+        /**
+         * Lower bound of the estimated price.
+         *
+         * @return {int}
+         */
+        PriceEsitmate.prototype.getLowEstimate = function () {
+            return this.lowEstimate;
+        };
+    
+        /**
+         * Setter for LowEstimate
+         * 
+         * @param {int} value 
+         */
+        PriceEsitmate.prototype.setLowEstimate = function (value) {
+            this.lowEstimate = value;
+        };
+    
+        /**
+         * Unique identifier representing a specific product for a given latitude & longitude. For example, uberX in
+         * San Francisco will have a different product_id than uberX in Los Angeles.
+         *
+         * @return {string}
+         */
+        PriceEsitmate.prototype.getProductId = function () {
+            return this.productId;
+        };
+    
+        /**
+         * Setter for ProductId
+         * 
+         * @param {string} value 
+         */
+        PriceEsitmate.prototype.setProductId = function (value) {
+            this.productId = value;
+        };
+    
+        /**
+         * Expected surge multiplier. Surge is active if surge_multiplier is greater than 1. Price estimate already
+         * factors in the surge multiplier.
+         *
+         * @return {double}
+         */
+        PriceEsitmate.prototype.getSurgeMultiplier = function () {
+            return this.surgeMultiplier;
+        };
+    
+        /**
+         * Setter for SurgeMultiplier
+         * 
+         * @param {double} value 
+         */
+        PriceEsitmate.prototype.setSurgeMultiplier = function (value) {
+            this.surgeMultiplier = value;
+        };
+    
+        return PriceEsitmate;
+    }
 
 }(angular));

@@ -13,61 +13,80 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('ErrorBase', ['BaseModel', 'Errors',
-        function (BaseModel, Errors) {
-            var ErrorBase = function (obj) {
-                if (!obj) {
-                    this.errors = null;
-                    this.meta = null;
-                } else {
-                    this.errors = obj.errors.map(function (model) {
-                        return new Errors(model);
-                    });
-                    this.meta = obj.meta;
-                }
+    .factory('ErrorBase', ['BaseModel', ErrorBaseModel]);
+
+    function ErrorBaseModel(BaseModel) {
+        var ErrorBase = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.errors = this.getValue(obj.errors);
+            this.meta = this.getValue(obj.meta);
+        };
+
+        ErrorBase.prototype = new BaseModel();
+        ErrorBase.prototype.constructor = ErrorBase;
     
-            ErrorBase.prototype = new BaseModel();
-            ErrorBase.prototype.constructor = ErrorBase;
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {array}
-             */
-            ErrorBase.prototype.getErrors = function () {
-                return this.errors;
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        ErrorBase.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'errors', realName: 'errors', array: true, type: 'Errors' },
+                { name: 'meta', realName: 'meta' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        ErrorBase.prototype.discriminatorMap = function() {
+            return {
             };
-        
-            /**
-             * Setter for Errors
-             * 
-             * @param {array} value 
-             */
-            ErrorBase.prototype.setErrors = function (value) {
-                this.errors = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            ErrorBase.prototype.getMeta = function () {
-                return this.meta;
-            };
-        
-            /**
-             * Setter for Meta
-             * 
-             * @param {string} value 
-             */
-            ErrorBase.prototype.setMeta = function (value) {
-                this.meta = value;
-            };
-        
-            return ErrorBase;
-        }
-    ]);
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {array}
+         */
+        ErrorBase.prototype.getErrors = function () {
+            return this.errors;
+        };
+    
+        /**
+         * Setter for Errors
+         * 
+         * @param {array} value 
+         */
+        ErrorBase.prototype.setErrors = function (value) {
+            this.errors = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        ErrorBase.prototype.getMeta = function () {
+            return this.meta;
+        };
+    
+        /**
+         * Setter for Meta
+         * 
+         * @param {string} value 
+         */
+        ErrorBase.prototype.setMeta = function (value) {
+            this.meta = value;
+        };
+    
+        return ErrorBase;
+    }
 
 }(angular));

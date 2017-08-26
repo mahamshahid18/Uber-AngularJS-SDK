@@ -13,79 +13,99 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('Errors', ['BaseModel',
-        function (BaseModel) {
-            var Errors = function (obj) {
-                if (!obj) {
-                    this.code = null;
-                    this.status = null;
-                    this.title = null;
-                } else {
-                    this.code = obj.code;
-                    this.status = obj.status;
-                    this.title = obj.title;
-                }
+    .factory('Errors', ['BaseModel', ErrorsModel]);
+
+    function ErrorsModel(BaseModel) {
+        var Errors = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.code = this.getValue(obj.code);
+            this.status = this.getValue(obj.status);
+            this.title = this.getValue(obj.title);
+        };
+
+        Errors.prototype = new BaseModel();
+        Errors.prototype.constructor = Errors;
     
-            Errors.prototype = new BaseModel();
-            Errors.prototype.constructor = Errors;
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            Errors.prototype.getCode = function () {
-                return this.code;
-            };
-        
-            /**
-             * Setter for Code
-             * 
-             * @param {string} value 
-             */
-            Errors.prototype.setCode = function (value) {
-                this.code = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {int}
-             */
-            Errors.prototype.getStatus = function () {
-                return this.status;
-            };
-        
-            /**
-             * Setter for Status
-             * 
-             * @param {int} value 
-             */
-            Errors.prototype.setStatus = function (value) {
-                this.status = value;
-            };
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {string}
-             */
-            Errors.prototype.getTitle = function () {
-                return this.title;
-            };
-        
-            /**
-             * Setter for Title
-             * 
-             * @param {string} value 
-             */
-            Errors.prototype.setTitle = function (value) {
-                this.title = value;
-            };
-        
-            return Errors;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        Errors.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'code', realName: 'code' },
+                { name: 'status', realName: 'status' },
+                { name: 'title', realName: 'title' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        Errors.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        Errors.prototype.getCode = function () {
+            return this.code;
+        };
+    
+        /**
+         * Setter for Code
+         * 
+         * @param {string} value 
+         */
+        Errors.prototype.setCode = function (value) {
+            this.code = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {int}
+         */
+        Errors.prototype.getStatus = function () {
+            return this.status;
+        };
+    
+        /**
+         * Setter for Status
+         * 
+         * @param {int} value 
+         */
+        Errors.prototype.setStatus = function (value) {
+            this.status = value;
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {string}
+         */
+        Errors.prototype.getTitle = function () {
+            return this.title;
+        };
+    
+        /**
+         * Setter for Title
+         * 
+         * @param {string} value 
+         */
+        Errors.prototype.setTitle = function (value) {
+            this.title = value;
+        };
+    
+        return Errors;
+    }
 
 }(angular));

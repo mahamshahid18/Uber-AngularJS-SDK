@@ -8,17 +8,18 @@
 'use strict';
 
 angular.module('UberAPILib')
-    .factory('Configuration', [function() {
+    .factory('Configuration', [Configuration]);
+
+    function Configuration() {
         return {
             //The base Uri for API calls
-            BASEURI : "https://api.uber.com/v1",
+            BASEURI : 'https://api.uber.com/v1',
 
-            //The OAuth 2.0 access token to be set before API calls
+            //OAuth 2.0 Access Token
             //TODO: Replace the oAuthAccessToken with an appropriate value
-            oAuthAccessToken : "TODO: Replace"
+            oAuthAccessToken : 'TODO: Replace'
 
         };
     }
-]);
 
 }(angular));

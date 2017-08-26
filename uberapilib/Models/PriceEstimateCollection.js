@@ -13,41 +13,59 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('PriceEstimateCollection', ['BaseModel', 'PriceEsitmate',
-        function (BaseModel, PriceEsitmate) {
-            var PriceEstimateCollection = function (obj) {
-                if (!obj) {
-                    this.prices = null;
-                } else {
-                    this.prices = obj.prices.map(function (model) {
-                        return new PriceEsitmate(model);
-                    });
-                }
+    .factory('PriceEstimateCollection', ['BaseModel', PriceEstimateCollectionModel]);
+
+    function PriceEstimateCollectionModel(BaseModel) {
+        var PriceEstimateCollection = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.prices = this.getValue(obj.prices);
+        };
+
+        PriceEstimateCollection.prototype = new BaseModel();
+        PriceEstimateCollection.prototype.constructor = PriceEstimateCollection;
     
-            PriceEstimateCollection.prototype = new BaseModel();
-            PriceEstimateCollection.prototype.constructor = PriceEstimateCollection;
-        
-            /**
-             * List of price estimates
-             *
-             * @return {array}
-             */
-            PriceEstimateCollection.prototype.getPrices = function () {
-                return this.prices;
-            };
-        
-            /**
-             * Setter for Prices
-             * 
-             * @param {array} value 
-             */
-            PriceEstimateCollection.prototype.setPrices = function (value) {
-                this.prices = value;
-            };
-        
-            return PriceEstimateCollection;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        PriceEstimateCollection.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'prices', realName: 'prices', array: true, type: 'PriceEsitmate' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        PriceEstimateCollection.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * List of price estimates
+         *
+         * @return {array}
+         */
+        PriceEstimateCollection.prototype.getPrices = function () {
+            return this.prices;
+        };
+    
+        /**
+         * Setter for Prices
+         * 
+         * @param {array} value 
+         */
+        PriceEstimateCollection.prototype.setPrices = function (value) {
+            this.prices = value;
+        };
+    
+        return PriceEstimateCollection;
+    }
 
 }(angular));

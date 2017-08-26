@@ -13,45 +13,59 @@
  * @constructor
  */
 angular.module('UberAPILib')
-    .factory('Meta', ['BaseModel', 'SurgeConfirmation',
-        function (BaseModel, SurgeConfirmation) {
-            var Meta = function (obj) {
-                if (!obj) {
-                    this.surgeConfirmation = null;
-        
-                    // Append to variable dictionary
-                    this._variableDict['surgeConfirmation'] = 'surge_confirmation';
-                } else {
-                    this.surgeConfirmation = new SurgeConfirmation(obj.surge_confirmation);
-            
-                    // Append to variable dictionary
-                    this._variableDict['surgeConfirmation'] = 'surge_confirmation';
-                }
+    .factory('Meta', ['BaseModel', MetaModel]);
+
+    function MetaModel(BaseModel) {
+        var Meta = function (obj) {
+            if (obj === undefined || obj === null) {
+                return;
             }
+            this.surgeConfirmation = this.getValue(obj.surgeConfirmation);
+        };
+
+        Meta.prototype = new BaseModel();
+        Meta.prototype.constructor = Meta;
     
-            Meta.prototype = new BaseModel();
-            Meta.prototype.constructor = Meta;
-        
-            /**
-             * TODO: Write general description for this method
-             *
-             * @return {SurgeConfirmation}
-             */
-            Meta.prototype.getSurgeConfirmation = function () {
-                return this.surgeConfirmation;
-            };
-        
-            /**
-             * Setter for SurgeConfirmation
-             * 
-             * @param {SurgeConfirmation} value 
-             */
-            Meta.prototype.setSurgeConfirmation = function (value) {
-                this.surgeConfirmation = value;
-            };
-        
-            return Meta;
-        }
-    ]);
+        /**
+         * Function containing information about the fields of this model
+         * @return   {array}   Array of objects containing information about the fields
+         */
+        Meta.prototype.mappingInfo = function() {
+            return BaseModel.prototype.mappingInfo.call(this).concat([
+                { name: 'surgeConfirmation', realName: 'surge_confirmation', type: 'SurgeConfirmation' }
+            ]);
+        };
+    
+        /**
+         * Function containing information about discriminator values
+         * mapped with their corresponding model class names
+         *
+         * @return   {object}  Object containing Key-Value pairs mapping discriminator
+         *                     values with their corresponding model classes
+         */
+        Meta.prototype.discriminatorMap = function() {
+            return {};
+        };
+    
+        /**
+         * TODO: Write general description for this method
+         *
+         * @return {SurgeConfirmation}
+         */
+        Meta.prototype.getSurgeConfirmation = function () {
+            return this.surgeConfirmation;
+        };
+    
+        /**
+         * Setter for SurgeConfirmation
+         * 
+         * @param {SurgeConfirmation} value 
+         */
+        Meta.prototype.setSurgeConfirmation = function (value) {
+            this.surgeConfirmation = value;
+        };
+    
+        return Meta;
+    }
 
 }(angular));
